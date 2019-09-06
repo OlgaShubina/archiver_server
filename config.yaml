@@ -1,0 +1,50 @@
+damain:
+  archive_storage: "pg_archive"
+  chunk_storage: "redis_storage"
+  compress_archive_storage: "pg_compress_archive"
+  template: "template.py"
+  mimetype: 'application/octet-stream'
+  dict_interval: {"first_level" : 120.0, "second_level" : 300.0, "third_level" : 600.0}
+  query:
+    size_stream: 86400
+    density: 100
+pg_archive:
+  database:
+    user: "logger"
+    password: "logger"
+    host: "172.16.1.117"
+    dbname: "logger"
+    port: 5432
+  tables: [{"name": "log_double", "class": "LogDouble"}, 
+            {"name": "log_text", "class": "LogText"}]
+  table_name: ["log_double", "log_text"]          
+  time_field: "time"
+  id_field: "ch_id"
+  value_field: "value"          
+  
+     
+pg_compress_archive:
+  database:
+    user: "archiver"
+    password: "archiver"
+    host: "172.16.1.117"
+    dbname: "archive_compressed"
+    port: 5432
+  types:
+    table: "log_double"
+  text:
+    table: "log_text"    
+redis_storage:
+  host: "localhost"
+  port: 6379
+  chunk_db: 0
+  demon_db: 0
+  ttl: 1000
+
+celery: 
+  backend: 'redis://localhost/1'
+  broker: 'pyamqp://guest@localhost//'
+  result_backend: 'redis://localhost/1'
+  interval_add_value: 600
+  interval_process_data: 10
+  comand: "celery worker -l info -A task2 --beat"

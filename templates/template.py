@@ -78,8 +78,8 @@ if __name__ =='__main__':
 				try:
 					for i in chunk[ch]:
 						writer.writerow({
-							"time": str(datetime.datetime.strptime(i["time"], '%Y-%m-%d %H:%M:%S.%f')),
-							"value": str(i["value"])
+							"time": str(datetime.datetime.strptime(list(i.keys())[0], '%Y-%m-%d %H:%M:%S.%f')),
+							"value": str(list(i.values())[0])
 						})
 				except(KeyError):
 					pass

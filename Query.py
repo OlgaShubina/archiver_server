@@ -9,7 +9,7 @@ import uuid
 import logging
 from parsconfig import Config
 
-config = Config('config.yaml')
+config = Config('/home/olga/PycharmProjects/rest_api/config.yaml')
 
 
 ttl = 1000
